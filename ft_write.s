@@ -1,6 +1,8 @@
 section .text
 global ft_write
 
+extern __errno_location
+
 ft_write:
     mov rax, 1
     syscall
@@ -10,6 +12,6 @@ ft_write:
 
 .error:
     call __errno_location ; la meme que pour read
-    mov dword [rax] 9
+    mov dword [rax], 9
     mov rax, -1
     ret
