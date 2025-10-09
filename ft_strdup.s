@@ -4,8 +4,7 @@ global ft_strdup
 extern malloc
 extern ft_strlen
 extern ft_strcpy
-
-
+extern __errno_location
 
 ft_strdup:
     push rdi

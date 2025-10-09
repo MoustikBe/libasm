@@ -1,6 +1,8 @@
 section .text
 global ft_read
 
+extern __errno_location
+
 ft_read:
     mov rax, 0
     syscall
@@ -10,6 +12,6 @@ ft_read:
 
 .error:
     call __errno_location
-    mov dword [rax] 9
+    mov dword [rax], 9
     mov rax, -1
     ret
