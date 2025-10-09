@@ -4,5 +4,12 @@ global ft_write
 ft_write:
     mov rax, 1
     syscall
+    cmp rax, 0
+    jl .error
     ret
 
+.error:
+    call __errno_location ; la meme que pour read
+    mov dword [rax] 9
+    mov rax, -1
+    ret
