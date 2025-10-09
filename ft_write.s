@@ -9,5 +9,7 @@ ft_write:
     ret
 
 .error:
+    call __errno_location
+    mov dword [rax] 9
     mov rax, -1
     ret

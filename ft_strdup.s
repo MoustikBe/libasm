@@ -22,6 +22,7 @@ ft_strdup:
 
 
 .malloc_fail:
-    pop rsi 
+    call __errno_location
+    mov dword [rax], 12
     xor rax, rax 
     ret
