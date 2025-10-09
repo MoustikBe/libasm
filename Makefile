@@ -4,7 +4,7 @@ SFLAG	= -f elf64
 AR		= ar rcs
 RM      = rm -rf
 OBJDIR  = obj
-SOURCES = ft_write.s ft_strlen.s ft_read.s
+SOURCES = ft_write.s ft_strlen.s ft_read.s ft_strcpy.s ft_strcmp.s ft_strdup.s
 
 OBJECTS = $(SOURCES:%.s=$(OBJDIR)/%.o)
 
@@ -14,19 +14,15 @@ $(OBJDIR)/%.o: %.s
 
 $(NAME): $(OBJECTS)
 	@$(AR) $(NAME) $(OBJECTS)
-	@echo "\
-	\033[0;32m ___   _____          ___   ____   ___\n\
-	) __( )__ __(        )_ _( /  _ \\ / _( \n\
-	| _)    | |          _| |_ )  ' / ))_  \n\
-	)_(     )_(  _____  )_____(|_()_\\ \\__( \n\
-	            )_____(                   "
-	@echo "\nLibasm compiled -> cc main.c libasm.a"
+	@echo "\033[0;32m💻LIBASM💻"
+	@echo "Libasm compiled -> cc main.c libasm.a"
 
 clean : 
 	@$(RM) -r $(OBJDIR)  > /dev/null 2>&1
 
 fclean : clean
 	@$(RM) $(NAME)
+	@echo "\033[0;32mAll file deleted !"
 
 
 all : $(NAME)
