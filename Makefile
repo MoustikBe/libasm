@@ -4,7 +4,7 @@ SFLAG	= -f elf64
 AR		= ar rcs
 RM      = rm -rf
 OBJDIR  = obj
-SOURCES = ft_write.s ft_strlen.s ft_read.s ft_strcpy.s ft_strcmp.s ft_strdup.s
+SOURCES = ft_write.s ft_strlen.s ft_read.s ft_strcpy.s ft_strcmp.s ft_strdup.s ft_atoi_base_bonus.s
 
 OBJECTS = $(SOURCES:%.s=$(OBJDIR)/%.o)
 
