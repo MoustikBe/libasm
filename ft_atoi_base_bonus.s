@@ -1,9 +1,3 @@
-section .text
-global ft_atoi_base
-
-extern __errno_location
-extern ft_strlen
-
 # rax -> int #
 # has to handle binary base / hexa base / decimal base 
 # if something else then number -> Error
@@ -11,6 +5,12 @@ extern ft_strlen
 # int ft_atoi_base(char *str, char *base);
 # RDI -> char *str 
 # RSI -> char *base
+
+section .text
+global ft_atoi_base
+
+extern __errno_location
+extern ft_strlen
 
 ft_atoi_base:
     mov rdx, rdi
@@ -54,16 +54,38 @@ ft_atoi_base:
         cmp al, bl
         jne return_0
         inc rcx
-        jmp .loop
+        jmp .loop_deci
     
 .not_decimal:
-    xor rcx, rcx
     call ft_strlen
     cmp rax, 16
     jne return_0
-    .loop:
+    xor rcx, rcx
+    .loop_hexa:
+        cmp rcx, 10
+        je .decimal_next
+        mov al, byte [rdi + rcx]
+        mov bl, '0'
+        add bl, cl
+        cmp al, bl
+        jne return_0
+        inc rcx
+        jmp .loop_hexa
+
+.decimal_next:
+    mov rcx, 10
+    .loop_letter
         cmp rcx, 16
         je return_2
+        mov al, byte [rdi + rcx]
+        mov bl, 'A'
+        mov dl, cl
+        sub dl, 10
+        add bl, dl
+        cmp al, bl
+        jne return_0
+        inc rcx
+        jmp .loop_letter
 
 
 return_0: 
