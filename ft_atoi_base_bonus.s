@@ -15,22 +15,54 @@ extern ft_strlen
 ft_atoi_base:
     mov rdx, rdi
     mov rdi, rsi 
-    call verif_base ; call verif_base
+    call verif_base
     test rax, rax
-    jz return_0 ; if(!verif_base(base))
+    jz return_0
     mov rdi, rdx
-    cmp rax, 1
-    je .to_bin ; if (1 -> to_bin) 
-    cmp rax, 2 
-    je .to_hexa ; if (2 -> to hexa)
-    jmp .to_int ; else (to int)
+    jmp .to_int
+
+.to_int: ; Ce modele devrait fonctionner pour int et binaire mais peut être pas pour hexa car il ne sait pas que E = 14
+    call ft_strlen ; donc base_len est dans rax
+    mov r8, rax ; on mets la len dans r8 pq ? 
+    xor rbx, rbx ; rbx est pour stocker le resultat 
+    xor rdx, rdx ; pour stocker l'index de ou on se trouve
+    .loop_convert
+        mov rcx, byte [rdi + rdx] ; on stock dans rcx la valeur du char dans lequel on est
+        cmp rcx, 0 ; on le compare au char 0
+        je .return_val ; si c'est le char 0 on arrete la et return la valeur
+
+        cmp rcx, '0'  
+        jb .return_0 ; Si le nombre est moins haut que le char '0' pas bon error
+        cmp rcx, '9' ; Si le char est en dessous c'est good ca veut dire c'est un nombre  
+        jle .digit ; On boucle las bas 
+        cmp rcx, 'F' 
+        jle .upper ; Ici on check si jamais c'est un hexa en dessosus de F 
+        jmp .store ; On jump dans store 
+    
+    .digit:
+        sub rcx, '0' ; Couvertir dans sa valeur numerique  
+        jmp .store ; On jump dans le store 
+
+    .upper:
+        sub rcx, 'A' 
+        add rcx, 10 ; Converir dans sa valeur numerique
+
+    .store:
+        imul rbx, rbx, r8 ; Ici c'est la partie de result = result * [base]
+        add rbx, rcx ; Ici c'est ( + j) de la formule donc on add le char actuel transformer
+        inc rdx ; On incremente de 1 
+        jmp .loop_convert ; on reviens a la boucle pour continuer 
+
+.return_val:
+    mov rax, rbx
+    ret
 
 .verif_base:
     call ft_strlen
     cmp rax, 2
     jne .not_bin
 
-    mov al, byte [rdi]
+    mov al, byte[rdi]
     cmp al, '0'
     jne return_0
     mov al, byte [rdi + 1]
@@ -47,7 +79,7 @@ ft_atoi_base:
     xor rcx, rcx
     .loop_deci:
         cmp rcx, 10
-        je return_3
+        je return_1
         mov al, byte [rdi + rcx]
         mov bl, '0'
         add bl, cl
@@ -76,7 +108,7 @@ ft_atoi_base:
     mov rcx, 10
     .loop_letter
         cmp rcx, 16
-        je return_2
+        je return_1
         mov al, byte [rdi + rcx]
         mov bl, 'A'
         mov dl, cl
@@ -92,12 +124,8 @@ return_0:
     xor rax, rax
     ret
 
-return_2:
-    mov rax, 2
-    ret
-
-return_3:
-    mov rax, 3
+return_1:
+    mov rax, 1
     ret
 
 
