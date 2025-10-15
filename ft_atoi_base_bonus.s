@@ -13,23 +13,31 @@ extern __errno_location
 extern ft_strlen
 
 ft_atoi_base:
-    mov rdx, rdi
+    push rdi ; Donc la on push str dans la stack je crois 
+    push rsi
     mov rdi, rsi 
     call .verif_base
     test rax, rax
-    jz .return_0
-    mov rdi, rdx
+    jz .cleanup_return_0
+    pop rsi
+    pop rdi
     jmp .to_int
 
+.cleanup_return_0:
+    pop rsi
+    pop rdi
+    jmp .return_0
+
 .to_int: ; Ce modele devrait fonctionner pour int et binaire mais peut être pas pour hexa car il ne sait pas que E = 14
-    mov rdi, rsi  ; rsi contains base
+    push rdi ; On mets str dans la stack
+    mov rdi, rsi ; On mets la val de rsi dans rdi  ?????
     call ft_strlen ; donc base_len est dans rax
     mov r8, rax ; on mets la len dans r8 pq ? 
-    mov rdi, rdx  ; restore str pointer
-    xor rbx, rbx ; rbx est pour stocker le resultat 
-    xor rdx, rdx ; pour stocker l'index de ou on se trouve
+    pop rdi
+    xor rbx, rbx
+    xor r10, r10 
     .loop_convert:
-        movzx rcx, byte[rdi + rdx] ; on stock dans rcx la valeur du char dans lequel on est
+        movzx rcx, byte[rdi + r10] ; on stock dans rcx la valeur du char dans lequel on est
         cmp rcx, 0 ; on le compare au char 0
         je .return_val ; si c'est le char 0 on arrete la et return la valeur
 
@@ -52,7 +60,7 @@ ft_atoi_base:
     .store:
         imul rbx, r8 ; Ici c'est la partie de result = result * [base]
         add rbx, rcx ; Ici c'est ( + j) de la formule donc on add le char actuel transformer
-        inc rdx ; On incremente de 1 
+        inc r10 ; On incremente de 1 
         jmp .loop_convert ; on reviens a la boucle pour continuer 
 
 .return_val:
@@ -60,7 +68,9 @@ ft_atoi_base:
     ret
 
 .verif_base:
+    push rdi ; Mais pq on le push dans le stack sa sert a quoi il recup pas les arguments par default dans rdi strlen ????
     call ft_strlen
+    pop rdi ; On recupere la valeur ???? je captes pas ce truc de faire push pop
     cmp rax, 2
     jne .not_bin
 
