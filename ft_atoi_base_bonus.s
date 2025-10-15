@@ -46,8 +46,8 @@ ft_atoi_base:
         cmp rcx, '9' ; Si le char est en dessous c'est good ca veut dire c'est un nombre  
         jle .digit ; On boucle las bas 
         cmp rcx, 'F' 
-        jle .upper ; Ici on check si jamais c'est un hexa en dessosus de F 
-        jmp .store ; On jump dans store 
+        jle .upper ; Ici on check si jamais c'est un hexa en dessosus de F
+        jmp .return_val 
     
     .digit:
         sub rcx, '0' ; Couvertir dans sa valeur numerique  
@@ -56,6 +56,7 @@ ft_atoi_base:
     .upper:
         sub rcx, 'A' 
         add rcx, 10 ; Converir dans sa valeur numerique
+        jmp .store ; On jump dans store 
 
     .store:
         imul rbx, r8 ; Ici c'est la partie de result = result * [base]
