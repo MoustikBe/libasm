@@ -30,9 +30,9 @@ ft_atoi_base:
 
 .to_int: ; Ce modele devrait fonctionner pour int et binaire mais peut être pas pour hexa car il ne sait pas que E = 14
     push rdi ; On mets str dans la stack
-    mov rdi, rsi ; On mets la val de rsi dans rdi  ?????
+    mov rdi, rsi
     call ft_strlen ; donc base_len est dans rax
-    mov r8, rax ; on mets la len dans r8 pq ? 
+    mov r8, rax 
     pop rdi
     xor rbx, rbx
     xor r10, r10 
@@ -69,9 +69,9 @@ ft_atoi_base:
     ret
 
 .verif_base:
-    push rdi ; Mais pq on le push dans le stack sa sert a quoi il recup pas les arguments par default dans rdi strlen ????
+    push rdi
     call ft_strlen
-    pop rdi ; On recupere la valeur ???? je captes pas ce truc de faire push pop
+    pop rdi 
     cmp rax, 2
     jne .not_bin
 
